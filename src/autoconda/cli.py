@@ -56,11 +56,11 @@ def activate(path: Optional[str]):
         sys.exit(1)
 
 
-@main.command()
-@click.argument('command', nargs=-1, required=True)
+@main.command(context_settings=dict(ignore_unknown_options=True, allow_extra_args=True))
 @click.option('--path', '-p', type=click.Path(exists=True, file_okay=False, dir_okay=True),
               help='Path to start searching for environment.yml (defaults to current directory)')
-def run(command, path: Optional[str]):
+@click.pass_context
+def run(ctx, path: Optional[str]):
     """Run a command in the conda environment specified in environment.yml.
     
     This command finds the environment.yml file starting from the current directory
@@ -69,9 +69,16 @@ def run(command, path: Optional[str]):
     
     Examples:
         autoconda run python script.py
-        autoconda run python -c "import numpy; print(numpy.__version__)"
+        autoconda run -- python -c "import numpy; print(numpy.__version__)"
         autoconda run jupyter notebook
+        autoconda run -- python --version
     """
+    command = ctx.args
+    
+    if not command:
+        click.echo("Error: No command specified.", err=True)
+        click.echo(ctx.get_help())
+        sys.exit(2)
     try:
         env_name = get_conda_environment_name(path)
         
@@ -81,7 +88,7 @@ def run(command, path: Optional[str]):
             sys.exit(1)
         
         click.echo(f"Running command in conda environment '{env_name}': {' '.join(command)}")
-        exit_code = run_in_environment(env_name, list(command))
+        exit_code = run_in_environment(env_name, command)
         sys.exit(exit_code)
         
     except CondaError as e:
