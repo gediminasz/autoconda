@@ -1,0 +1,12 @@
+name: autoconda-dev
+dependencies:
+  - python=3.9
+  - pyyaml
+  - click
+  - pytest
+  - pip
+  - pip:
+    - build
+channels:
+  - conda-forge
+  - defaults
