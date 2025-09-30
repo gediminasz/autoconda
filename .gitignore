@@ -27,6 +27,8 @@ MANIFEST
 htmlcov/
 .tox/
 .nox/
+.mypy_cache/
+.ruff_cache/
 
 # Virtual environments
 .env
