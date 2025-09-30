@@ -79,7 +79,10 @@ def environment_exists(env_name: str) -> bool:
 
 
 def activate_environment(env_name: str) -> None:
-    """Activate a conda environment by spawning a new shell.
+    """Activate a conda environment by spawning an interactive shell.
+    
+    Similar to 'poetry shell', this spawns a new shell with the conda environment
+    activated using 'conda run'.
     
     Args:
         env_name: Name of the environment to activate.
@@ -93,24 +96,18 @@ def activate_environment(env_name: str) -> None:
     if not environment_exists(env_name):
         raise CondaError(f"Environment '{env_name}' does not exist")
     
-    # Determine the shell
+    # Determine the shell to use
     shell = os.environ.get('SHELL', '/bin/bash')
+    shell_name = os.path.basename(shell)
     
-    # Create activation command based on shell
-    if 'bash' in shell or 'zsh' in shell:
-        # For bash/zsh, source the conda script and activate
-        conda_sh = subprocess.run(['conda', 'info', '--base'], 
-                                 capture_output=True, text=True)
-        if conda_sh.returncode == 0:
-            conda_base = conda_sh.stdout.strip()
-            activation_script = f"source {conda_base}/etc/profile.d/conda.sh && conda activate {env_name}"
-            subprocess.run([shell, '-c', activation_script])
-        else:
-            # Fallback to direct conda activate
-            subprocess.run(['conda', 'activate', env_name])
-    else:
-        # For other shells, try direct activation
-        subprocess.run(['conda', 'activate', env_name])
+    # Use conda run to spawn an interactive shell in the environment
+    # --no-capture-output ensures interactive shell works properly
+    conda_command = ['conda', 'run', '--name', env_name, '--no-capture-output', shell_name]
+    
+    try:
+        subprocess.run(conda_command)
+    except subprocess.SubprocessError as e:
+        raise CondaError(f"Failed to activate environment '{env_name}': {e}")
 
 
 def run_in_environment(env_name: str, command: List[str]) -> int:
