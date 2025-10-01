@@ -135,7 +135,8 @@ def run_in_environment(env_name: str, command: list[str]) -> int:
         raise CondaError(f"Environment '{env_name}' does not exist")
 
     # Use conda run to execute the command in the environment
-    conda_command = ["conda", "run", "-n", env_name] + command
+    # --no-capture-output ensures proper handling of stdin/stdout/stderr
+    conda_command = ["conda", "run", "-n", env_name, "--no-capture-output"] + command
 
     try:
         result = subprocess.run(conda_command)
