@@ -96,21 +96,12 @@ def activate_environment(env_name: str) -> None:
     shell = os.environ.get("SHELL", "/bin/bash")
     shell_name = os.path.basename(shell)
 
-    # Set up environment variables to modify the prompt
-    # This will prepend the environment name to the prompt
-    env = os.environ.copy()
-
-    # For bash and zsh, modify PS1 to include the environment name
-    if shell_name in ("bash", "zsh"):
-        current_ps1 = env.get("PS1", "\\u@\\h:\\w\\$ ")
-        env["PS1"] = f"({env_name}) {current_ps1}"
-
     # Use conda run to spawn an interactive shell in the environment
     # --no-capture-output ensures interactive shell works properly
     conda_command = ["conda", "run", "--name", env_name, "--no-capture-output", shell_name]
 
     try:
-        subprocess.run(conda_command, env=env)
+        subprocess.run(conda_command)
     except subprocess.SubprocessError as e:
         raise CondaError(f"Failed to activate environment '{env_name}': {e}") from e
 
