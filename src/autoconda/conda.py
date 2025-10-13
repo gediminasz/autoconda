@@ -74,38 +74,6 @@ def environment_exists(env_name: str) -> bool:
         return False
 
 
-def activate_environment(env_name: str) -> None:
-    """Activate a conda environment by spawning an interactive shell.
-
-    Similar to 'poetry shell', this spawns a new shell with the conda environment
-    activated using 'conda run'.
-
-    Args:
-        env_name: Name of the environment to activate.
-
-    Raises:
-        CondaError: If conda is not available or environment doesn't exist.
-    """
-    if not check_conda_available():
-        raise CondaError("Conda is not available in the system")
-
-    if not environment_exists(env_name):
-        raise CondaError(f"Environment '{env_name}' does not exist")
-
-    # Determine the shell to use
-    shell = os.environ.get("SHELL", "/bin/bash")
-    shell_name = os.path.basename(shell)
-
-    # Use conda run to spawn an interactive shell in the environment
-    # --no-capture-output ensures interactive shell works properly
-    conda_command = ["conda", "run", "--name", env_name, "--no-capture-output", shell_name]
-
-    try:
-        subprocess.run(conda_command)
-    except subprocess.SubprocessError as e:
-        raise CondaError(f"Failed to activate environment '{env_name}': {e}") from e
-
-
 def run_in_environment(env_name: str, command: list[str]) -> int:
     """Run a command in a specific conda environment.
 
