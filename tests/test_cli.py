@@ -38,7 +38,7 @@ def test_version_command():
     exit_code, stdout, stderr = run_cli(["--version"])
 
     assert exit_code == 0
-    assert "autoconda 0.1.0" in stdout
+    assert "autoconda 0.2.1" in stdout
 
 
 def test_help_command():

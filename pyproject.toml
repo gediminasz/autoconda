@@ -8,3 +8,8 @@ dependencies = [
 
 [project.scripts]
 autoconda = "autoconda.cli:main"
+
+[dependency-groups]
+dev = [
+  "pytest",
+]
