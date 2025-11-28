@@ -1,32 +1,20 @@
 """Command-line interface for autoconda."""
 
 import argparse
+import os
 import sys
 
 from .conda import CondaError, run_in_environment
 from .environment import get_conda_environment_name
 
 
-def cmd_run(args):
-    """Run a command in the conda environment specified in environment.yml.
-
-    This command finds the environment.yml file starting from the current directory
-    (or specified path) and walking up the directory tree, then runs the specified
-    command in that environment.
-    """
-    command = args.command
-
-    if not command:
-        print("Error: No command specified.", file=sys.stderr)
-        sys.exit(2)
-
+def cmd_run(command: list[str], path: str):
     try:
-        env_name = get_conda_environment_name(args.path)
+        env_name = get_conda_environment_name(path)
 
         if env_name is None:
             print(
-                "Error: No environment.yml file found or no environment name "
-                "specified in the file.",
+                "Error: No environment.yml file found or no environment name specified in the file.",
                 file=sys.stderr,
             )
             sys.exit(1)
@@ -70,6 +58,7 @@ def main():
         "--path",
         "-p",
         help="Path to start searching for environment.yml (defaults to current directory)",
+        default=os.getcwd(),
     )
     parser.add_argument("command", nargs="*", help="Command and arguments to run")
 
@@ -81,13 +70,11 @@ def main():
         print(f"autoconda {__version__}")
         sys.exit(0)
 
-    # If no command provided, show help
     if not args.command:
         parser.print_help()
         sys.exit(0)
 
-    # Run the command
-    cmd_run(args)
+    cmd_run(args.command, args.path)
 
 
 if __name__ == "__main__":
