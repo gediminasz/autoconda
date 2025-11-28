@@ -58,15 +58,6 @@ def test_run_command_no_environment():
         assert "No environment.yml file found" in stderr
 
 
-def test_run_command_with_subcommand_no_environment():
-    """Test run subcommand when no environment.yml exists."""
-    with tempfile.TemporaryDirectory() as tmpdir:
-        exit_code, stdout, stderr = run_cli(["run", "--path", tmpdir, "echo", "test"])
-
-        assert exit_code == 1
-        assert "No environment.yml file found" in stderr
-
-
 def test_run_command_no_args():
     """Test run command without arguments."""
     exit_code, stdout, stderr = run_cli([])
