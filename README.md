@@ -3,7 +3,7 @@
 Installation (for now):
 
 ```
-uv tool install --python 3.14 .
+uv tool install .
 ```
 
 Usage:

@@ -18,7 +18,7 @@ parser.add_argument(
 parser.add_argument("command", nargs="+", help="Command and arguments to run")
 
 
-def main(path: Path, command: list[str]):
+def autoconda(path: Path, command: list[str]):
     env_name = get_conda_environment_name(path)
 
     if env_name is None:
@@ -32,6 +32,10 @@ def main(path: Path, command: list[str]):
     sys.exit(result.returncode)
 
 
-if __name__ == "__main__":
+def main():
     args = parser.parse_args()
-    main(**vars(args))
+    autoconda(**vars(args))
+
+
+if __name__ == "__main__":
+    main()
