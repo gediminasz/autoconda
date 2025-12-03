@@ -2,6 +2,7 @@ import argparse
 import os
 import subprocess
 import sys
+from pathlib import Path
 
 from . import __version__
 from .environment import get_conda_environment_name
@@ -12,11 +13,12 @@ parser.add_argument(
     "-p",
     help="Path to start searching for environment.yml or environment.yaml (defaults to current directory)",
     default=os.getcwd(),
+    type=Path,
 )
 parser.add_argument("command", nargs="+", help="Command and arguments to run")
 
 
-def main(path: str, command: list[str]):
+def main(path: Path, command: list[str]):
     env_name = get_conda_environment_name(path)
 
     if env_name is None:
