@@ -7,15 +7,18 @@ def find_environment_file(start_path: str) -> Path | None:
     current_path = Path(start_path).resolve()
 
     while current_path != current_path.parent:
-        env_file = current_path / "environment.yml"
-        if env_file.exists():
-            return env_file
+        # Check for .yml first (preferred), then .yaml
+        for ext in ["yml", "yaml"]:
+            env_file = current_path / f"environment.{ext}"
+            if env_file.exists():
+                return env_file
         current_path = current_path.parent
 
     # Check root directory
-    env_file = current_path / "environment.yml"
-    if env_file.exists():
-        return env_file
+    for ext in ["yml", "yaml"]:
+        env_file = current_path / f"environment.{ext}"
+        if env_file.exists():
+            return env_file
 
     return None
 

@@ -10,7 +10,7 @@ parser = argparse.ArgumentParser(description=f"autoconda {__version__}")
 parser.add_argument(
     "--path",
     "-p",
-    help="Path to start searching for environment.yml (defaults to current directory)",
+    help="Path to start searching for environment.yml or environment.yaml (defaults to current directory)",
     default=os.getcwd(),
 )
 parser.add_argument("command", nargs="+", help="Command and arguments to run")
@@ -21,7 +21,7 @@ def main(path: str, command: list[str]):
 
     if env_name is None:
         print(
-            "Error: No environment.yml file found or no environment name specified in the file.",
+            "Error: No environment.yml or environment.yaml file found or no environment name specified in the file.",
             file=sys.stderr,
         )
         sys.exit(1)
