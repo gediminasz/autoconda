@@ -96,14 +96,14 @@ def test_yml_preferred_over_yaml():
         # Create both files
         yml_file = Path(tmpdir) / "environment.yml"
         yml_file.write_text("name: yml-env\n")
-        
+
         yaml_file = Path(tmpdir) / "environment.yaml"
         yaml_file.write_text("name: yaml-env\n")
 
         # Should find .yml file first
         result = find_environment_file(tmpdir)
         assert result == yml_file
-        
+
         # Should extract name from .yml file
         env_name = get_conda_environment_name(tmpdir)
         assert env_name == "yml-env"
