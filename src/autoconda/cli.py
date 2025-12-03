@@ -7,11 +7,12 @@ from pathlib import Path
 from . import __version__
 from .environment import get_conda_environment_name
 
-parser = argparse.ArgumentParser(description=f"autoconda {__version__}")
+parser = argparse.ArgumentParser(prog="autoconda")
+parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
 parser.add_argument(
     "--path",
     "-p",
-    help="Path to start searching for environment.yml or environment.yaml (defaults to current directory)",
+    help="path to start searching for environment.yml or environment.yaml (defaults to current directory)",
     default=os.getcwd(),
     type=Path,
 )
