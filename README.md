@@ -12,10 +12,10 @@ options:
   --path PATH, -p PATH  path to start searching for environment.yml or environment.yaml (defaults to current directory)
 ```
 
-Installation (for now):
+Installation:
 
 ```
-uv tool install .
+uv tool install autoconda
 ```
 
 Usage:
