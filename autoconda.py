@@ -8,7 +8,7 @@ from pathlib import Path
 
 import yaml
 
-__version__ = "0.4.0"
+__version__ = "0.4.1"
 
 parser = argparse.ArgumentParser(prog="autoconda")
 parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
